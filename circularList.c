@@ -86,12 +86,12 @@ static void removeLink(struct CircularList* list, struct Link* link)
 	/* set link to null and delete */
 	link->prev = 0;
 	link->next = 0;
-	free(link);
-	link = 0;
 
 	/* decrease size of list */
 	list->size--;
 
+	free(link);
+	link = 0;
 
 }
 
@@ -110,14 +110,16 @@ struct CircularList* circularListCreate()
  */
 void circularListDestroy(struct CircularList* list)
 {
+	struct Link *linkToDelete;
 	while(!circularListIsEmpty(list)) {
-		struct Link *linkToDelete = malloc(sizeof(struct Link));
 		linkToDelete = list->sentinel->next;
 		removeLink(list, linkToDelete);
 	}
 
 	free(list->sentinel);
+	list->sentinel = 0;	
 	free(list);
+	list = 0;	
 
 }
 
@@ -204,8 +206,7 @@ int circularListIsEmpty(struct CircularList* list)
 void circularListPrint(struct CircularList* list)
 {
 	// FIXME: you must write this
-	struct Link *itr = malloc(sizeof(struct Link));
-	itr = list->sentinel->next;
+	struct Link *itr = list->sentinel->next;
 	while (itr != list->sentinel) {
 		printf("%.2f\n", itr->value);
 		itr = itr->next;
@@ -218,8 +219,7 @@ void circularListPrint(struct CircularList* list)
 void circularListReverse(struct CircularList* list)
 {
 	// FIXME: you must write this
-	struct Link *itr = malloc(sizeof(struct Link));
-	itr = list->sentinel->prev;
+	struct Link *itr = list->sentinel->prev;
 	while (itr != list->sentinel) {
 		printf("%.2f\n", itr->value);
 		itr = itr->prev;
